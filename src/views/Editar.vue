@@ -4,7 +4,7 @@
         <br>
         <h6>{{tarea.nombre}} - {{tarea.id}}</h6>
         <br>
-        <h6 v-if="tarea.hasOwnProperty('prueba') === true">
+        <h6 v-if="tarea.hasOwnProperty('prueba') === true && tarea.prueba !== ''">
             Prueba (campo): {{tarea.prueba}}
             </h6>
         <form  @submit.prevent="editarTarea(tarea)" class="mt-2">

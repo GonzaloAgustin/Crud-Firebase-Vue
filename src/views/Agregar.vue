@@ -4,7 +4,7 @@
         <form @submit.prevent="agregarTarea(tareaNueva)" class="mt-3">
             <input type="text" v-model="tareaNueva.nombre" placeholder="Nombre" class="mb-3"><br>
             <input type="text" v-model="tareaNueva.prueba" placeholder="Prueba"><br>
-            <button type="submit" class="mt-3 btn btn-success">Agregar</button>
+            <button type="submit" class="mt-3 btn btn-success">Agregar Tarea</button>
         </form>
     </div>
 </template>

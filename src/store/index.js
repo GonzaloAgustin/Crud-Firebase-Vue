@@ -2,13 +2,16 @@ import Vue from 'vue'
 import Vuex, { createLogger } from 'vuex'
 import {db} from '@/firebase'
 import router from '@/router'
+import { auth } from '../firebase'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
     tareas: [],
-    tarea: {nombre: '', id:''}
+    tarea: {nombre: '', id:''},
+    usuario: null,
+    error: null
   },
   mutations: {
     setTareas(state, payload){
@@ -19,6 +22,12 @@ export default new Vuex.Store({
     },
     setEliminarTarea(state, payload){
       state.tareas = state.tareas.filter(o => o.id !== payload)
+    },
+    setUsuarioCreado(state, payload){
+      state.usuario = payload
+    },
+    setError(state, payload){
+      state.error = payload
     }
   },
   actions: {
@@ -66,9 +75,24 @@ export default new Vuex.Store({
       db.collection('Tarea').doc(idTarea).delete()
       .then(() => {
         console.log('Tarea eliminada');
-        dispatch('getTareas');
-        //commit('setEliminarTarea', idTarea)
+        //dispatch('getTareas');
+        commit('setEliminarTarea', idTarea)
       })
+    },
+    registrarUsuario({commit}, usuario){
+      auth.createUserWithEmailAndPassword(usuario.email, usuario.clave)
+        .then(res => {
+          console.log(res);
+          const usuarioCreado = {
+            email: res.user.email,
+            uid: res.user.uid
+          }
+          commit('setUsuarioCreado', usuarioCreado);
+        })
+        .catch(error => {
+          console.log(error)
+          commit('setError', error)
+        })
     }
   },
   modules: {

@@ -19,6 +19,11 @@ Vue.use(VueRouter)
     path: '/agregar',
     name: 'Agregar',
     component: () => import(/* webpackChunkName: "inicio" */ '../views/Agregar.vue')
+  },
+  {
+    path: '/registrar',
+    name: 'Registrar',
+    component: () => import(/* webpackChunkName: "inicio" */ '../views/Registrar.vue')
   }
 ]
 

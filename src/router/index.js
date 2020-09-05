@@ -24,6 +24,16 @@ Vue.use(VueRouter)
     path: '/registrar',
     name: 'Registrar',
     component: () => import(/* webpackChunkName: "inicio" */ '../views/Registrar.vue')
+  },
+  {
+    path: '/logeado',
+    name: 'Logeado',
+    component: () => import(/* webpackChunkName: "inicio" */ '../views/Logeado.vue')
+  },
+  {
+    path: '/login',
+    name: 'LogIn',
+    component: () => import(/* webpackChunkName: "inicio" */ '../views/LogIn.vue')
   }
 ]
 

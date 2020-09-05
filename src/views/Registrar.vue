@@ -23,9 +23,13 @@
             class="m-2"
             > <br>
 
-            <button type="submit" class="btn btn-success">Registrar</button>
+            <button type="submit" class="btn btn-success" :disabled='!desactivar'>Registrar</button><br>
+            <b v-if="mensajeError === true" class="text-danger">{{msg}}</b>
+            <b v-if="mensajeError === false" class="text-success">{{msg}}</b>
+            <br>
+            <b class="text-dark">{{error}}</b>
         </form>
-        <p>{{error}}</p>
+
     </div>
 </template>
 
@@ -39,17 +43,33 @@ export default {
         return{
             email:'',
             clave1:'',
-            clave2:''
+            clave2:'',
+            msg: ''
         }
     },
     created(){
-
+ 
     },
     methods:{
-        ...mapActions(['registrarUsuario'])
+        ...mapActions(['registrarUsuario']),
+
+ 
     },
     computed:{
-        ...mapState(['error'])
-    }
+        ...mapState(['error']),
+        desactivar(){
+            return this.clave1 === this.clave2 && this.clave1.trim() !== '' && this.clave1.length >= 6
+            },
+            mensajeError(){
+            if(this.desactivar === false){
+                this.msg = 'Las claves deben ser iguales'
+                return true;
+            }else{
+                this.msg = '¡Las claves son iguales!';
+                return false;
+            }
+        } 
+        }
+  
 }
 </script>

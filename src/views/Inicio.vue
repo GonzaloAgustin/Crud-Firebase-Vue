@@ -7,13 +7,21 @@
                 <button class="btn btn-success m-3">Agregar Tarea</button>    
             </router-link>
 
+            <router-link to="/registrar">
+                <button class="btn btn-info m-3">Registrar Usuario</button>    
+            </router-link>
+
+            <router-link to="/logIn">
+                <button class="btn btn-primary m-3">Log In</button>    
+            </router-link>
+
             <ul class="list-group">
                 <li v-for="(item, index) in tareas" :key="index" class="list-group-item">
 
                     {{item.nombre}} - {{item.id}}
 
                     <router-link :to="{name: 'Editar', params:{id: item.id}}">
-                        <button class="pt-1 btn btn-sm btn-warning m-1 text-dark">Editar</button>    
+                        <button class="pt-1 btn btn-sm btn-warning m-1 text-white">Editar</button>    
                      </router-link>
                         <button class="btn btn-sm btn-danger" type="submit" @click="eliminarTarea(item.id)">Eliminar</button>
                 </li>

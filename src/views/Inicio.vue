@@ -15,6 +15,8 @@
                 <button class="btn btn-primary m-3">Log In</button>    
             </router-link>
 
+                <button class="btn btn-dark m-3" @click="logOut">Log Out</button>  
+
             <ul class="list-group">
                 <li v-for="(item, index) in tareas" :key="index" class="list-group-item">
 
@@ -41,7 +43,7 @@ export default {
         this.getTareas();
     },
     methods:{
-        ...mapActions(['getTareas','eliminarTarea'])
+        ...mapActions(['getTareas','eliminarTarea', 'logOut'])
     },
     computed:{
         ...mapState(['tareas'])

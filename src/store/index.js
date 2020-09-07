@@ -110,6 +110,15 @@ export default new Vuex.Store({
           console.log(error)
           commit('setError', error)
         })
+    },
+    logOut({commit}){
+      auth.signOut()
+        .then(() => {
+          router.push('/')
+        })
+    },
+    usuarioDetectado({commit}, user){
+      commit('setUsuarioCreado', user)
     }
   },
   modules: {

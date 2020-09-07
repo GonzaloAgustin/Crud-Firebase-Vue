@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-
+import {auth} from '@/firebase'
 
 Vue.use(VueRouter)
 
@@ -13,12 +13,14 @@ Vue.use(VueRouter)
   {
     path: '/editar/:id',
     name: 'Editar',
-    component: () => import(/* webpackChunkName: "inicio" */ '../views/Editar.vue')
+    component: () => import(/* webpackChunkName: "inicio" */ '../views/Editar.vue'),
+    meta: { requiresAuth: true }
   },
   {
     path: '/agregar',
     name: 'Agregar',
-    component: () => import(/* webpackChunkName: "inicio" */ '../views/Agregar.vue')
+    component: () => import(/* webpackChunkName: "inicio" */ '../views/Agregar.vue'),
+    meta: { requiresAuth: true }
   },
   {
     path: '/registrar',
@@ -28,7 +30,8 @@ Vue.use(VueRouter)
   {
     path: '/logeado',
     name: 'Logeado',
-    component: () => import(/* webpackChunkName: "inicio" */ '../views/Logeado.vue')
+    component: () => import(/* webpackChunkName: "inicio" */ '../views/Logeado.vue'),
+    meta: { requiresAuth: true }
   },
   {
     path: '/login',
@@ -40,6 +43,25 @@ Vue.use(VueRouter)
 const router = new VueRouter({
   mode: 'history',
   routes
+})
+
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+
+    const usuario = auth.currentUser
+    console.log(usuario)
+
+    if (!usuario) {
+      next({
+        path: '/LogIn'
+      })
+    } else {
+      next()
+    }
+
+  } else {
+    next()
+  }
 })
 
 export default router

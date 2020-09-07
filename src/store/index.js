@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import Vuex, { createLogger } from 'vuex'
-import {db} from '@/firebase'
+import { db,auth } from '@/firebase'
 import router from '@/router'
-import { auth } from '../firebase'
+//import { auth } from '../firebase'
 
 Vue.use(Vuex)
 
@@ -114,11 +114,20 @@ export default new Vuex.Store({
     logOut({commit}){
       auth.signOut()
         .then(() => {
-          router.push('/')
+          router.push('/logIn')
         })
     },
     usuarioDetectado({commit}, user){
       commit('setUsuarioCreado', user)
+    }
+  },
+  getters: {
+    validoUsuarioLogeado(state){
+      if(state.usuario === null){
+        return false
+      }else{
+        return true
+      }
     }
   },
   modules: {

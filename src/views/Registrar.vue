@@ -52,8 +52,6 @@ export default {
     },
     methods:{
         ...mapActions(['registrarUsuario']),
-
- 
     },
     computed:{
         ...mapState(['error']),

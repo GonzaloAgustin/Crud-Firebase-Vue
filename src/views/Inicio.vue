@@ -16,7 +16,7 @@
             </router-link>
 
                 <button class="btn btn-dark m-3" @click="logOut"  v-if="validoUsuarioLogeado">Log Out</button>  
-
+        <div v-if="validoUsuarioLogeado"> 
             <ul class="list-group">
                 <li v-for="(item, index) in tareas" :key="index" class="list-group-item">
 
@@ -28,6 +28,7 @@
                         <button class="btn btn-sm btn-danger" type="submit" @click="eliminarTarea(item.id)">Eliminar</button>
                 </li>
             </ul>
+        </div>
         </div>                   
     </div>
 </template>

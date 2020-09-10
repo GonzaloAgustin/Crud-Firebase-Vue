@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex, { createLogger } from 'vuex'
-import { db,auth } from '@/firebase'
+import { db, auth } from '@/firebase'
 import router from '@/router'
 //import { auth } from '../firebase'
 
@@ -9,30 +9,30 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     tareas: [],
-    tarea: {nombre: '', id:''},
+    tarea: { nombre: '', id: '' },
     usuario: null,
     error: null
   },
   mutations: {
-    setTareas(state, payload){
+    setTareas(state, payload) {
       state.tareas = payload;
     },
-    setTarea(state, payload){
+    setTarea(state, payload) {
       state.tarea = payload;
     },
-    setEliminarTarea(state, payload){
+    setEliminarTarea(state, payload) {
       state.tareas = state.tareas.filter(o => o.id !== payload)
     },
-    setUsuarioCreado(state, payload){
+    setUsuarioCreado(state, payload) {
       state.usuario = payload
     },
-    setError(state, payload){
+    setError(state, payload) {
       state.error = payload
     }
   },
   actions: {
-    getTareas({commit}){
-      db.collection('Tarea').get()
+    getTareas({ commit, state }) {
+      db.collection(state.usuario.email).get()
         .then(res => {
           const tareas = []
           res.forEach(doc => {
@@ -43,8 +43,8 @@ export default new Vuex.Store({
           commit('setTareas', tareas);
         })
     },
-    getTarea({commit}, idTarea){
-      db.collection('Tarea').doc(idTarea).get()
+    getTarea({ commit, state }, idTarea) {
+      db.collection(state.usuario.email).doc(idTarea).get()
         .then(doc => {
           console.log(doc.id);
           console.log(doc.data())
@@ -53,40 +53,45 @@ export default new Vuex.Store({
           commit('setTarea', tarea);
         })
     },
-    editarTarea({commit}, tarea){
-      db.collection('Tarea').doc(tarea.id).update({
+    editarTarea({ commit, state }, tarea) {
+      db.collection(state.usuario.email).doc(tarea.id).update({
         nombre: tarea.nombre
       }).then(() => {
         console.log('Tarea editada');
         router.push('/');
       })
     },
-    agregarTarea({commit}, tarea){
-      //db.collection('Tarea').doc('idInventado').set({ // <-- Se agrega un id manual.
-      db.collection('Tarea').add({ // <-- Se agrega un id automático.
-        nombre: tarea.nombre,
+    agregarTarea({ commit, state }, tarea) {
+      //db.collection('Tarea').doc('idUsuario').set({ // <-- Se agrega un id manual.
+      db.collection(state.usuario.email).add({ // <-- Se agrega un id automático.
+        nombre: tarea.nombre, 
         prueba: tarea.prueba
       }).then(doc => {
         console.log('Tarea agregada');
         router.push('/');
       })
     },
-    eliminarTarea({commit, dispatch},idTarea){
-      db.collection('Tarea').doc(idTarea).delete()
-      .then(() => {
-        console.log('Tarea eliminada');
-        //dispatch('getTareas');
-        commit('setEliminarTarea', idTarea)
-      })
+    eliminarTarea({ commit, dispatch, state }, idTarea) {
+      db.collection(state.usuario.email).doc(idTarea).delete()
+        .then(() => {
+          console.log('Tarea eliminada');
+          //dispatch('getTareas');
+          commit('setEliminarTarea', idTarea)
+        })
     },
-    registrarUsuario({commit}, usuario){
+    registrarUsuario({ commit }, usuario) {
       auth.createUserWithEmailAndPassword(usuario.email, usuario.clave)
         .then(res => {
           console.log(res);
+
           const usuarioCreado = {
             email: res.user.email,
             uid: res.user.uid
           }
+
+          db.collection(res.user.email).add({
+            nombre: 'Tarea de ejemplo'
+          })
           commit('setUsuarioCreado', usuarioCreado);
           router.push('/logeado')
         })
@@ -94,14 +99,18 @@ export default new Vuex.Store({
           console.log(error)
           commit('setError', error)
         })
+        .catch(error => {
+          console.log(error)
+          commit('setError', error)
+        })
     },
-    usuarioLogIn({commit}, user){
+    usuarioLogIn({ commit }, user) {
       auth.signInWithEmailAndPassword(user.email, user.clave)
         .then(res => {
           console.log(res);
           const usuarioLogeado = {
-            email : res.user.email,
-            uid : res.user.uid
+            email: res.user.email,
+            uid: res.user.uid
           }
           commit('setUsuarioCreado', usuarioLogeado);
           router.push('/logeado')
@@ -111,21 +120,21 @@ export default new Vuex.Store({
           commit('setError', error)
         })
     },
-    logOut({commit}){
+    logOut({ commit }) {
       auth.signOut()
         .then(() => {
           router.push('/logIn')
         })
     },
-    usuarioDetectado({commit}, user){
+    usuarioDetectado({ commit }, user) {
       commit('setUsuarioCreado', user)
     }
   },
   getters: {
-    validoUsuarioLogeado(state){
-      if(state.usuario === null){
+    validoUsuarioLogeado(state) {
+      if (state.usuario === null) {
         return false
-      }else{
+      } else {
         return true
       }
     }

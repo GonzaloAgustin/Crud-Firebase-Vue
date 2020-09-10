@@ -9,7 +9,7 @@
             </h6>
         <form  @submit.prevent="editarTarea(tarea)" class="mt-2">
             <input type="text" v-model="tarea.nombre">
-            <button type="submit">Editar</button>
+            <button type="submit" class="btn btn-primary ml-1">Editar</button>
         </form>
     </div>
 </template>

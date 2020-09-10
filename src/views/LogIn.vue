@@ -43,8 +43,7 @@ export default {
         ...mapState(['error'])
     },
     methods:{
-        ...mapActions(['usuarioLogIn']),
-    }
-    
+        ...mapActions(['usuarioLogIn'])
+}
 }
 </script>

@@ -11,7 +11,8 @@ export default new Vuex.Store({
     tareas: [],
     tarea: { nombre: '', id: '' },
     usuario: null,
-    error: null
+    error: null,
+    loading: false
   },
   mutations: {
     setTareas(state, payload) {
@@ -28,20 +29,27 @@ export default new Vuex.Store({
     },
     setError(state, payload) {
       state.error = payload
+    },
+    setLoading(state, payload){
+      state.loading = payload
     }
   },
   actions: {
     getTareas({ commit, state }) {
-      db.collection(state.usuario.email).get()
-        .then(res => {
-          const tareas = []
-          res.forEach(doc => {
-            let tarea = doc.data();
-            tarea.id = doc.id
-            tareas.push(tarea)
+        commit('setLoading', true)
+        //setTimeout(() => {
+          db.collection(state.usuario.email).get()
+          .then(res => {
+            const tareas = []
+            res.forEach(doc => {
+              let tarea = doc.data();
+              tarea.id = doc.id
+              tareas.push(tarea)
+              commit('setLoading', false)
+            })
+            commit('setTareas', tareas);
           })
-          commit('setTareas', tareas);
-        })
+        //},2500)
     },
     getTarea({ commit, state }, idTarea) {
       db.collection(state.usuario.email).doc(idTarea).get()
@@ -63,10 +71,12 @@ export default new Vuex.Store({
     },
     agregarTarea({ commit, state }, tarea) {
       //db.collection('Tarea').doc('idUsuario').set({ // <-- Se agrega un id manual.
+      commit('setLoading', true)
       db.collection(state.usuario.email).add({ // <-- Se agrega un id automático.
         nombre: tarea.nombre, 
         prueba: tarea.prueba
       }).then(doc => {
+        commit('setLoading', false)
         console.log('Tarea agregada');
         router.push('/');
       })

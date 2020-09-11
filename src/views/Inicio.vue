@@ -16,7 +16,15 @@
             </router-link>
 
                 <button class="btn btn-dark m-3" @click="logOut"  v-if="validoUsuarioLogeado">Log Out</button>  
-        <div v-if="validoUsuarioLogeado"> 
+
+                <div v-if="loading" class="text-center">
+                    <h5 class="mt-3">Cargando contenido..</h5>
+                    <div class="spinner-border text-success" role="status">
+                    <span class="sr-only">Loading...</span>
+                    </div>
+                </div>
+
+        <div v-if="validoUsuarioLogeado && !loading"> 
             <ul class="list-group">
                 <li v-for="(item, index) in tareas" :key="index" class="list-group-item">
 
@@ -33,10 +41,25 @@
     </div>
 </template>
 
+<!--
+<script>
+//  Centro el loading del pacman
+new Spinner().spin(document.getElementById('center'));
+</script> 
+
+// Al body
+<div id ="center" style="position:fixed;top:60%;left:45%" class="mt-4">
+<pacman-loader :loading="loading"></pacman-loader>
+</div>
+-->
+
 
 <script>
 
 import {mapActions, mapState, mapGetters} from 'vuex'
+import PacmanLoader from 'vue-spinner/src/PacmanLoader.vue'
+
+
 
 export default {
     name: 'Inicio',
@@ -47,8 +70,11 @@ export default {
         ...mapActions(['getTareas','eliminarTarea', 'logOut'])
     },
     computed:{
-        ...mapState(['tareas']),
+        ...mapState(['tareas','loading']),
         ...mapGetters(['validoUsuarioLogeado'])
-    }
+    },
+    components: {
+    PacmanLoader
+  }
 }
 </script>

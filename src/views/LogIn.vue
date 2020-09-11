@@ -7,20 +7,37 @@
         <input 
         type="email"
         placeholder="Ingrese su email"
-        v-model="email"
-        class="m-2"
+        v-model="$v.email.$model"
+        class="m-2 form-control"
         >
-        <br>
+
+        <small v-if="!$v.email.required" class="text-danger text-left d-block ml-3">
+            Campo requerido
+        </small>
+        
+        <small v-if="!$v.email.email" class="text-danger text-left d-block ml-3">
+            Email inválido
+        </small>
 
         <input 
         type="password"
         placeholder="Ingrese su clave"
         v-model="clave"
-        class="m-2"
+        class="m-2 form-control"
         >
-        <br>
 
-        <button type='submit' class='btn btn-info m-2'>Acceder</button>
+        <small v-if="!$v.clave.required" class="text-danger text-left d-block ml-3">
+            Campo requerido
+        </small>
+
+        <small v-if="!$v.clave.minLength" class="text-danger text-left d-block ml-3">
+            Mínimo 6 carácteres
+        </small>
+
+        <button type='submit' class='btn btn-info m-2' :disabled="$v.$invalid">
+            Acceder
+        </button>
+
         </form>
         <b class="text-danger">{{error}}</b>
         
@@ -30,6 +47,7 @@
 <script>
 
 import {mapActions, mapState} from 'vuex'
+import { required, minLength, email } from 'vuelidate/lib/validators'
 
 export default {
     name: 'LogIn',
@@ -44,6 +62,16 @@ export default {
     },
     methods:{
         ...mapActions(['usuarioLogIn'])
-}
+    },
+    validations:{
+        email:{
+            required,
+            email
+        },
+        clave:{
+            required,
+            minLength: minLength(6)
+        }
+    }
 }
 </script>

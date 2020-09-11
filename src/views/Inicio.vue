@@ -31,7 +31,7 @@
                     {{item.nombre}} - {{item.id}}
 
                     <router-link :to="{name: 'Editar', params:{id: item.id}}">
-                        <button class="pt-1 btn btn-sm btn-warning m-1 text-white">Editar</button>    
+                        <button class="btn btn-sm btn-warning m-1 text-white">Editar</button>    
                      </router-link>
                         <button class="btn btn-sm btn-danger" type="submit" @click="eliminarTarea(item.id)">Eliminar</button>
                 </li>
@@ -73,8 +73,8 @@ export default {
         ...mapState(['tareas','loading']),
         ...mapGetters(['validoUsuarioLogeado'])
     },
-    components: {
+    /*components: {
     PacmanLoader
-  }
+  }*/
 }
 </script>

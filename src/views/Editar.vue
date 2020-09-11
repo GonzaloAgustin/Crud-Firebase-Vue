@@ -17,7 +17,7 @@
         </small>
 
         <small class="d-block text-danger" v-if="!$v.tarea.nombre.minLength">
-            Mínimo 5 caracteres
+            Mínimo 5 carácteres
         </small>
         
         <button type="submit" class="btn btn-primary my-3" :disabled="$v.tarea.nombre.$invalid">

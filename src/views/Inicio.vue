@@ -17,7 +17,7 @@
 
                 <button class="btn btn-dark m-3" @click="logOut"  v-if="validoUsuarioLogeado">Log Out</button>  
 
-                <div v-if="loading" class="text-center">
+                <div v-if="loading && validoUsuarioLogeado" class="text-center">
                     <h5 class="mt-3">Cargando contenido..</h5>
                     <div class="spinner-border text-success" role="status">
                     <span class="sr-only">Loading...</span>

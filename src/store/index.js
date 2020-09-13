@@ -37,6 +37,7 @@ export default new Vuex.Store({
   actions: {
     getTareas({ commit, state }) {
         commit('setLoading', true)
+        if(state.usuario !== null){
         //setTimeout(() => {
           db.collection(state.usuario.email).get()
           .then(res => {
@@ -49,6 +50,7 @@ export default new Vuex.Store({
             })
             commit('setTareas', tareas);
           })
+        }
         //},2500)
     },
     getTarea({ commit, state }, idTarea) {

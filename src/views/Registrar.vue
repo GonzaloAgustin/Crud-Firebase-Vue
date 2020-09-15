@@ -6,26 +6,44 @@
 
             <input 
             type="email"
-            v-model="email"
+            v-model="$v.email.$model"
             placeholder="Ingrese su email"
-            class="m-2"
-            > <br>
+            class="m-2 form-control"
+            >
+
+            <small class="d-block text-danger" v-if="!$v.email.required">
+                Campo obligatorio
+            </small>
+
+            <small class="d-block text-danger" v-if="!$v.email.email">
+                Email incorrecto
+            </small>
 
             <input type="password"
             v-model="clave1"
             placeholder="Ingrese su clave"
-            class="m-2"
-            > <br>
+            class="m-2 form-control"
+            > 
+
+            <small class="d-block text-danger" v-if="!$v.clave1.minLength">
+                Mínimo 6 carácteres
+            </small>
 
             <input type="password"
             v-model="clave2"
             placeholder="Verifique su clave"
-            class="m-2"
-            > <br>
+            class="m-2 form-control"
+            >
 
-            <button type="submit" class="btn btn-success" :disabled='!desactivar'>Registrar</button><br>
-            <b v-if="mensajeError === true" class="text-danger">{{msg}}</b>
-            <b v-if="mensajeError === false" class="text-success">{{msg}}</b>
+            <small class="d-block text-danger" v-if="!$v.clave2.sameAs">
+                Contrseñas no coinciden
+            </small>
+
+            <button type="submit" class="btn btn-success" :disabled='$v.$invalid'>
+                Registrar
+            </button>
+            <!--<b v-if="mensajeError" class="text-danger">{{msg}}</b>
+            <b v-if="!mensajeError" class="text-success">{{msg}}</b> -->
             <br>
             <b class="text-dark">{{error}}</b>
         </form>
@@ -36,6 +54,7 @@
 <script>
 
 import {mapActions, mapState} from 'vuex'
+import { required, minLength, email, sameAs } from 'vuelidate/lib/validators'
 
 export default {
     name: 'Registrar',
@@ -67,6 +86,11 @@ export default {
                 return false;
             }
         } 
+        },
+        validations:{
+            email:{required, email},
+            clave1:{minLength: minLength(6)},
+            clave2:{sameAs: sameAs('clave1')}
         }
   
 }

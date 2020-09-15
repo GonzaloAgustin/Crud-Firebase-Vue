@@ -100,9 +100,8 @@ export default new Vuex.Store({
             email: res.user.email,
             uid: res.user.uid
           }
-
           db.collection(res.user.email).add({
-            nombre: 'Tarea de ejemplo'
+            nombre: 'Tarea de ejemplo creada automáticamente'
           })
           commit('setUsuarioCreado', usuarioCreado);
           router.push('/logeado')

@@ -12,7 +12,8 @@ export default new Vuex.Store({
     tarea: { nombre: '', id: '' },
     usuario: null,
     error: null,
-    loading: false
+    loading: false,
+    textoBuscar: ''
   },
   mutations: {
     setTareas(state, payload) {
@@ -139,6 +140,10 @@ export default new Vuex.Store({
     },
     usuarioDetectado({ commit }, user) {
       commit('setUsuarioCreado', user)
+    },
+    buscador({ state }, payload){
+      state.textoBuscar = payload.toLowerCase();
+      console.log(state.textoBuscar);
     }
   },
   getters: {
@@ -148,6 +153,16 @@ export default new Vuex.Store({
       } else {
         return true
       }
+    },
+    buscadorGetters(state){
+      let arregloFiltrado = []
+      for(let item of state.tareas){
+        let nombre = item.nombre.toLowerCase();
+        if(nombre.indexOf(state.textoBuscar) >= 0){
+          arregloFiltrado.push(item)
+        }
+      }
+      return arregloFiltrado;
     }
   },
   modules: {

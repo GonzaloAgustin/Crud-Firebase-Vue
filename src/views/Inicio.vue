@@ -6,6 +6,20 @@
             <router-link to="/agregar" v-if="validoUsuarioLogeado">
                 <button class="btn btn-success m-3">Agregar Tarea</button>    
             </router-link>
+            
+
+            <div class="form-now">
+                <div class="form-group row justify-content-md-center">
+                    <form @submit,prevent="buscador(textoBuscar)">
+                    <input 
+                    type="text" class="form-control col col-lg-12" 
+                    placeholder="Buscar..."
+                    v-model="textoBuscar"
+                    v-on:keyup="buscador(textoBuscar)"
+                    >
+                    </form>
+                </div>
+            </div>
 
             <router-link to="/registrar" v-if="!validoUsuarioLogeado">
                 <button class="btn btn-info m-3">Registrar Usuario</button>    
@@ -26,7 +40,7 @@
 
         <div v-if="validoUsuarioLogeado && !loading"> 
             <ul class="list-group">
-                <li v-for="(item, index) in tareas" :key="index" class="list-group-item">
+                <li v-for="(item, index) in buscadorGetters" :key="index" class="list-group-item">
 
                     {{item.nombre}} - {{item.id}}
 
@@ -63,15 +77,20 @@ import PacmanLoader from 'vue-spinner/src/PacmanLoader.vue'
 
 export default {
     name: 'Inicio',
+    data(){
+        return{
+            textoBuscar:''
+        }
+    },  
     created(){
         this.getTareas();
     },
     methods:{
-        ...mapActions(['getTareas','eliminarTarea', 'logOut'])
+        ...mapActions(['getTareas','eliminarTarea', 'logOut','buscador'])
     },
     computed:{
         ...mapState(['tareas','loading']),
-        ...mapGetters(['validoUsuarioLogeado'])
+        ...mapGetters(['validoUsuarioLogeado','buscadorGetters'])
     },
     /*components: {
     PacmanLoader
